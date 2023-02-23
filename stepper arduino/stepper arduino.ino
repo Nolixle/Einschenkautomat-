@@ -2,6 +2,11 @@ const int DIR = 2;
 const int STEP = 3;
 const int steps_per_rev = 2000;
 
+//geht nicht da DIR2 glieichen Pin wie DIR zugewiesen wurde 
+//selbe für STEP2
+//Vorschlag 
+//const int DIR_stepper2 = 4;
+//const int STEP_stepper2 = 5; 
 const int DIR2 = 2;    // Stepper 2 
 const int STEP2 = 3;
 const int steps_per_rev2 = 2000;
