@@ -1,6 +1,10 @@
 const int DIR = 2;
 const int STEP = 3;
-const int  steps_per_rev = 2000;
+const int steps_per_rev = 2000;
+
+const int DIR2 = 2;    // Stepper 2 
+const int STEP2 = 3;
+const int steps_per_rev2 = 2000;
 
 void setup()
 {
