@@ -1,0 +1,8 @@
+1 Taster 1 betätigen 
+2 stepper 2 soll hochfahren 
+3 stepper 1 leicht seitversetzt langsam hochfahren aber ned zu weit 
+4 stepper 2 langsam runter fahren und stepper 1 langsam hoch 
+5 stepper 1 stehen bleiben      stepper 2 in Ausgangsstellung 
+6 stepper 1 stck runterfahren  
+7 Gleichstrom Motor ein 
+8 stepper 1 komplett hochfahren 
