@@ -5,4 +5,4 @@
 5 stepper 1 stehen bleiben      stepper 2 in Ausgangsstellung 
 6 stepper 1 stck runterfahren  
 7 Gleichstrom Motor ein 
-8 stepper 1 komplett hochfahren 
+8 stepper 1 komplett hochfahren. 
