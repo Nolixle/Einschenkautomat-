@@ -24,7 +24,7 @@ void loop()
    
     for(int i = 0; i<steps_per_rev; i++)
 
-    digitalWrite(STEP, HIGH);
+    digitalWrite(STEP, HIGH);   // da wird ein Schritt gemacht 
     delayMicroseconds(2000);
     digitalWrite(STEP, LOW);
     delayMicroseconds(2000);
@@ -38,3 +38,4 @@ void loop()
 
   
 }
+
