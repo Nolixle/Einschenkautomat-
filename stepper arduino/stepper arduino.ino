@@ -7,7 +7,8 @@ void setup()
 Motor.setSpeed(5);
 }
 
-void loop() {
+void loop() 
+{
 Motor.step(2048);
 delay(1000); 
 Motor.step(-2048); 
