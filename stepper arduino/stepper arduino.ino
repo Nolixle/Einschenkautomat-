@@ -1,5 +1,5 @@
 #define STEPS_PER_REVOLUTION 2000
-#define DELAY_STEPPER 2000;
+#define DELAY_STEPPER 2000
 
 void BeerPouringRoutine(void);
 void StartSwitchISR(void);
@@ -17,9 +17,9 @@ const int STEP2 = 7;
 
 
 const int EmergencySwitch = 2; //real interrupt pin 
-bool EmergencySwitchStatus = TRUE;
+bool EmergencySwitchStatus = true;
 const int StartSwitch = 3; //real interrupt pin 
-bool StartSwitchStatus = FALSE;
+bool StartSwitchStatus = false;
 
 int rev = 5;
 
@@ -33,8 +33,8 @@ void setup()
   pinMode(StartSwitch, INPUT);
   pinMode(StartSwitch, LOW);
   //Interrupt  for Emergency switch and StartSwitch 
-  attachInterrupt(digitalPintInterrupt(EmergencySwitch), EmergencyStopISR, FALLING);
-  attachInterrupt(digitalPintInterrupt(StartSwitchStatus), StartSwitchISR, RISING);
+  attachInterrupt(digitalPinToInterrupt(EmergencySwitch), EmergencyStopISR, FALLING);
+  attachInterrupt(digitalPinToInterrupt(StartSwitchStatus), StartSwitchISR, RISING);
   Serial.println("Interrupt initialized");
 
   pinMode(STEP, OUTPUT);
@@ -45,12 +45,14 @@ void setup()
 
   if(digitalRead(EmergencySwitch) != HIGH)
   {
-    EmergencySwitchStatus = TRUE;
+    EmergencySwitchStatus = true;
+    Serial.println("Emergency Stop is PRESSED");
   }
   else{
-    EmergencySwitchStatus = FALSE;
+    EmergencySwitchStatus = false;
+    Serial.println("Emergency Stop is NOT pressed");
   }
-  Serial.println("Emergency Stop is pressed %c, [1 pressed, 0 not pressed]", EmergencySwitchStatus);
+
   Serial.println("Initializing done");
   Serial.println("-------------------------------------------");
 }
@@ -58,15 +60,15 @@ void setup()
 void loop()
 { 
   //run BeerPouringroutine when start button is pressed and Emergency Switch is not pressed 
-  if(FALSE != EmergencySwitch && TRUE == StartSwitch)
+  if(false != EmergencySwitch && true == StartSwitch)
   {
     BeerPouringRoutine();
   }
-  else if(FALSE == StartSwitch) //Status messages 
+  else if(false == StartSwitch) //Status messages 
   {
     Serial.println("Start Switch not pressed");
   }
-   else if(TRUE == EmergencySwitch)
+   else if(true == EmergencySwitch)
   {
     Serial.println("Emergency Switch pressed");
   }
@@ -77,7 +79,7 @@ void EmergencyStopISR(void)
   //Switch off Stepper
   digitalWrite(STEP, LOW);
   digitalWrite(STEP2, LOW);
-  EmergencySwitchStatus = TRUE;
+  EmergencySwitchStatus = true;
 }
 
 void StartSwitchISR(void)
@@ -85,7 +87,7 @@ void StartSwitchISR(void)
   //only if System is not Busy start new iteration of Beer
   digitalWrite(STEP, LOW);
   digitalWrite(STEP2, LOW);
-  StartSwitchStatus = TRUE;
+  StartSwitchStatus = true;
 }
 
 void BeerPouringRoutine(void)
