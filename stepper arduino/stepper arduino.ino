@@ -8,28 +8,29 @@
 #define STEP2  5
 #define STEPS_PER_REV2  2000
 
- void funktion1(); //Functions never used 
- void funktion2(); 
+void funktion(void); //Functions never used 
+
+
+void funktion()
 {
                                  
   for(int i = 0; i<STEPS_PER_REV; i++) 
-  //{ //TODO brakets missing, you will get a compilier warning 
+  { 
     digitalWrite(STEP, HIGH);   // da wird ein Schritt gemacht 
     delayMicroseconds(2000);
     digitalWrite(STEP, LOW);
     delayMicroseconds(2000);
-  //} //TODO braket missing 
-    for(int i = 0; i<STEPS_PER_REV; i++) 
-  //{ TODO breaket missing
+  } 
+  for(int i = 0; i<STEPS_PER_REV; i++) 
+  {
     digitalWrite(STEP2, HIGH);
     delayMicroseconds(2000);
     digitalWrite(STEP2, LOW);
     delayMicroseconds(2000);
-  //}
+  }
 }
 
 void setup()
-//no empty line allowed //TODO delete empty line 
 {
   Serial.begin(115200);
   pinMode(STEP, OUTPUT);
@@ -37,40 +38,13 @@ void setup()
   pinMode(STEP2, OUTPUT);   
   pinMode(DIR2, OUTPUT);    
 }
- 
-
-
-
-
-
 
 void loop()
 {
   Serial.println("Spinning Clockwise...");
   digitalWrite(DIR, HIGH);
   digitalWrite(DIR2, HIGH); // Neu Stepp
-  
-   
-    for(int i = 0; i<STEPS_PER_REV; i++)
-
-    digitalWrite(STEP, HIGH);   // da wird ein Schritt gemacht 
-    delayMicroseconds(2000);
-    digitalWrite(STEP, LOW);
-    delayMicroseconds(2000);
-   
-    for(int i = 0; i<STEPS_PER_REV; i++)
-  
-    digitalWrite(STEP2, HIGH);
-    delayMicroseconds(2000);
-    digitalWrite(STEP2, LOW);
-    delayMicroseconds(2000);
-
-
-
-}
-void funktion1()
-{
-
+  funktion(); 
 }
 
 /*correct function decalreation and usage 
