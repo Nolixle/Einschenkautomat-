@@ -25,9 +25,9 @@ void funktion()
   } 
 for(int i = 0; i<STEPS_PER_REV; i++) 
  {
-   digitalWrite(STEP, HIGH);
-   delayMicroseconds(1000);
    digitalWrite(STEP, LOW);
+   delayMicroseconds(1000);
+   digitalWrite(STEP, HIGH);
     delayMicroseconds(1000);
     }
    
@@ -39,7 +39,7 @@ void funktion2()
 {
   for(int i = 0; i<STEPS_PER_REV; i++) 
      {
-        digitalWrite(STEP2, LOW);
+     digitalWrite(STEP2, LOW);
     delayMicroseconds(1000);
     digitalWrite(STEP2, HIGH);   // da wird ein Schritt gemacht 
     delayMicroseconds(1000);
