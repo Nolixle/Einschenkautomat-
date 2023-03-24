@@ -98,7 +98,9 @@ void setup()
   pinMode(STEP2, OUTPUT);   
   pinMode(DIR2, OUTPUT);
 
-   Serial.println("Pins configured");
+  attachInterrupt(digitalPinToInterrupt(EmergencySwitch), EmergencyStopISR, FALLING);
+  attachInterrupt(digitalPinToInterrupt(StartSwitchStatus), StartSwitchISR, RISING);
+  Serial.println("Pins configured");
 
   if(digitalRead(EmergencySwitch) != HIGH)
   {
