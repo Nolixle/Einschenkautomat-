@@ -24,65 +24,6 @@ bool StartSwitchStatus = false;
 
 int rev = 5;
 
-void funktion1()
-{
-  for(int i = 0; i<STEPS_PER_REV; i++) 
-  { 
-    digitalWrite(STEP, HIGH);
-    digitalWrite(STEP2, HIGH);   // da wird ein Schritt gemacht 
-    delayMicroseconds(1000);
-    digitalWrite(STEP, LOW);
-    digitalWrite(STEP2, LOW);
-    delayMicroseconds(1000);
-
-  } 
-}
-void funktion2()
-{
-  for(int i = 0; i<STEPS_PER_REV; i++) 
-     {
-    digitalWrite(STEP, HIGH);
-    delayMicroseconds(1000);
-    digitalWrite(STEP, LOW); 
-    delayMicroseconds(1000);
-    digitalWrite(STEP2, HIGH);
-    delayMicroseconds(1000);
-    digitalWrite(STEP2, LOW);  
-    delayMicroseconds(1000);
-     }
-}
-void funktion3()
-{
-  for(int i = 0; i<STEPS_PER_REV; i++) 
-     {
-    digitalWrite(STEP2, HIGH);
-    delayMicroseconds(1000);
-    digitalWrite(STEP2, LOW);   // da wird ein Schritt gemacht 
-    delayMicroseconds(1000);
-     }
-}
-void funktion4()
-{
-   for(int i = 0; i<STEPS_PER_REV; i++) 
-  {   
-    digitalWrite(STEP2, HIGH);
-    delayMicroseconds(1000);
-    digitalWrite(STEP2, LOW);
-    delayMicroseconds(1000);
-  }
-}
-void funktion5()
-{
-   for(int i = 0; i<STEPS_PER_REV; i++) 
-  {   
-    digitalWrite(STEP, HIGH);
-    digitalWrite(STEP2, HIGH);    
-    delayMicroseconds(1000);
-    digitalWrite(STEP, LOW);
-    digitalWrite(STEP2, LOW);
-    delayMicroseconds(1000);
-  }
-}
 
 void setup()
 {
@@ -176,4 +117,68 @@ void BeerPouringRoutine(void)
   digitalWrite(DIR, LOW);
   digitalWrite(DIR2, LOW); 
   funktion5();
+}
+
+void funktion1()
+{
+  for(int i = 0; i<STEPS_PER_REV; i++) 
+  { 
+    digitalWrite(STEP, HIGH);
+    digitalWrite(STEP2, HIGH);   // da wird ein Schritt gemacht 
+    delayMicroseconds(1000);
+    digitalWrite(STEP, LOW);
+    digitalWrite(STEP2, LOW);
+    delayMicroseconds(1000);
+
+  } 
+}
+
+void funktion2()
+{
+  for(int i = 0; i<STEPS_PER_REV; i++) 
+  {
+    digitalWrite(STEP, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(STEP, LOW); 
+    delayMicroseconds(1000);
+    digitalWrite(STEP2, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(STEP2, LOW);  
+    delayMicroseconds(1000);
+  }
+}
+
+void funktion3()
+{
+  for(int i = 0; i<STEPS_PER_REV; i++) 
+  {
+    digitalWrite(STEP2, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(STEP2, LOW);   // da wird ein Schritt gemacht 
+    delayMicroseconds(1000);
+  }
+}
+
+void funktion4()
+{
+  for(int i = 0; i<STEPS_PER_REV; i++) 
+  {   
+    digitalWrite(STEP2, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(STEP2, LOW);
+    delayMicroseconds(1000);
+  }
+}
+
+void funktion5()
+{
+  for(int i = 0; i<STEPS_PER_REV; i++) 
+  {   
+    digitalWrite(STEP, HIGH);
+    digitalWrite(STEP2, HIGH);    
+    delayMicroseconds(1000);
+    digitalWrite(STEP, LOW);
+    digitalWrite(STEP2, LOW);
+    delayMicroseconds(1000);
+  }  
 }
