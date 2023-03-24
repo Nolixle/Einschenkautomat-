@@ -41,6 +41,7 @@ void setup()
 
   attachInterrupt(digitalPinToInterrupt(EmergencySwitch), EmergencyStopISR, FALLING);
   attachInterrupt(digitalPinToInterrupt(StartSwitchStatus), StartSwitchISR, RISING);
+  
   Serial.println("Pins configured");
 
   if(digitalRead(EmergencySwitch) != HIGH)
