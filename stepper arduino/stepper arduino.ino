@@ -11,11 +11,11 @@ void StartSwitchISR(void);
 void EmergencyStopISR(void);
 void ErrorState(void);
 void EmergencyStopPressed(void);
-void funktion1(void);  
-void funktion2(void);
-void funktion3(void);
-void funktion4(void);
-void funktion5(void);
+void Ranfuehren(void);  
+void Einschenken(void);
+void Hefeextrahieren(void);
+void Hefeeinschenken(void);
+void Fertigstellen(void);
 
 const int EmergencySwitch = 6; //real interrupt pin 
 bool EmergencySwitchStatus = true;
@@ -96,36 +96,36 @@ void BeerPouringRoutine(void)
 {  
   Serial.println("Spinning Clockwise...");
   digitalWrite(DIR, HIGH);
-  digitalWrite(DIR2, HIGH); // Neu Stepp
-  funktion1(); 
+  digitalWrite(DIR2, HIGH);
+  Ranfuehren(); 
 
   Serial.print("Spinning Clockwise...");
   digitalWrite(DIR, LOW);
   digitalWrite(DIR2, HIGH); 
-  funktion2();
+  Einschenken();
 
   Serial.print("Spinning Clockwise...");
   digitalWrite(DIR, LOW);
   digitalWrite(DIR2, LOW); 
-  funktion3();
+  Hefeextrahieren();
 
   Serial.print("Spinning Clockwise...");
   digitalWrite(DIR, LOW);
   digitalWrite(DIR2, HIGH); 
-  funktion4();
+  Hefeeinschenken();
 
   Serial.print("Spinning Clockwise...");
   digitalWrite(DIR, LOW);
   digitalWrite(DIR2, LOW); 
-  funktion5();
+  Fertigstellen();
 }
 
-void funktion1()
+void Ranfueren()
 {
   for(int i = 0; i<STEPS_PER_REV; i++) 
   { 
     digitalWrite(STEP, HIGH);
-    digitalWrite(STEP2, HIGH);   // da wird ein Schritt gemacht 
+    digitalWrite(STEP2, HIGH);  
     delayMicroseconds(1000);
     digitalWrite(STEP, LOW);
     digitalWrite(STEP2, LOW);
@@ -134,7 +134,7 @@ void funktion1()
   } 
 }
 
-void funktion2()
+void Einschenken()
 {
   for(int i = 0; i<STEPS_PER_REV; i++) 
   {
@@ -149,18 +149,18 @@ void funktion2()
   }
 }
 
-void funktion3()
+void Hefeextrahieren()
 {
   for(int i = 0; i<STEPS_PER_REV; i++) 
   {
     digitalWrite(STEP2, HIGH);
     delayMicroseconds(1000);
-    digitalWrite(STEP2, LOW);   // da wird ein Schritt gemacht 
+    digitalWrite(STEP2, LOW);   
     delayMicroseconds(1000);
   }
 }
 
-void funktion4()
+void Hefeeinschenken()
 {
   for(int i = 0; i<STEPS_PER_REV; i++) 
   {   
@@ -171,7 +171,7 @@ void funktion4()
   }
 }
 
-void funktion5()
+void Fertigstellen()
 {
   for(int i = 0; i<STEPS_PER_REV; i++) 
   {   
