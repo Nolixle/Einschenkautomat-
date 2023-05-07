@@ -6,15 +6,11 @@
 #define STEP2  5
 #define STEPS_PER_REV2  2000
 
+// #define DEBUG
+
 void BeerPouringRoutine(void);
-// void StartSwitchISR(void);
-void StartSwitchON(void);
-void StartSwitchOFF(void);
-// void EmergencyStopISR(void);
-void EmergencyStopON(void);
-void EmergencyStopOFF(void);
-void ErrorState(void);
-void EmergencyStopPressed(void);
+void StartSwitchISR(void);
+void EmergencyStopISR(void);
 void Ranfuehren(void);  
 void Einschenken(void);
 void Hefeextrahieren(void);
@@ -27,7 +23,6 @@ const int StartSwitch = 3; //real interrupt pin
 bool StartSwitchStatus = false;
 
 int rev = 5;
-
 
 void setup()
 {
@@ -43,8 +38,8 @@ void setup()
   pinMode(STEP2, OUTPUT);   
   pinMode(DIR2, OUTPUT);
 
-  //attachInterrupt(digitalPinToInterrupt(EmergencySwitch), EmergencyStopISR, FALLING);
-  //attachInterrupt(digitalPinToInterrupt(StartSwitch), StartSwitchISR, RISING);
+  attachInterrupt(digitalPinToInterrupt(EmergencySwitch), EmergencyStopISR, FALLING);
+  attachInterrupt(digitalPinToInterrupt(StartSwitch), StartSwitchISR, RISING);
   
   Serial.println("Pins configured");
 
@@ -53,7 +48,8 @@ void setup()
     EmergencySwitchStatus = true;
     Serial.println("Emergency Stop is PRESSED");
   }
-  else{
+  else
+  {
     EmergencySwitchStatus = false;
     Serial.println("Emergency Stop is NOT pressed");
   }
@@ -63,7 +59,8 @@ void setup()
     StartSwitchStatus = false;
     Serial.println("Start is PRESSED");
   }
-  else{
+  else
+  {
     StartSwitchStatus = true;
     Serial.println("Start is NOT pressed");
   }
@@ -75,29 +72,13 @@ void setup()
 
 void loop()
 { 
-
-  //run BeerPouringroutine when start button is pressed and Emergency Switch is not pressed 
-  // Serial.print("start: ");
-  // Serial.println(digitalRead(2));
-  // Serial.print("stop: ");
-  // Serial.println(digitalRead(3));
-
-  if(HIGH == digitalRead(StartSwitch))
-  {
-    StartSwitchON();
-  }
-  else
-  {
-    StartSwitchOFF();
-  }
-  if(HIGH == digitalRead(EmergencySwitch))
-  {
-    EmergencyStopON();
-  }
-  else
-  {
-    EmergencyStopOFF();
-  }
+#ifdef DEBUG
+  // run BeerPouringroutine when start button is pressed and Emergency Switch is not pressed 
+  Serial.print("start: ");
+  Serial.println(digitalRead(StartSwitch));
+  Serial.print("stop: ");
+  Serial.println(digitalRead(EmergencySwitch));
+#endif
 
   if(true != EmergencySwitchStatus && true == StartSwitchStatus)
   {
@@ -113,41 +94,22 @@ void loop()
   }
 }
 
-void EmergencyStopON(void)
+void EmergencyStopISR(void)
 {
   //Switch off Stepper
   digitalWrite(STEP, LOW);
   digitalWrite(STEP2, LOW);
   EmergencySwitchStatus = true;
-  // Serial.println("Stop ON");
+  Serial.println("EMStop ON");
 }
 
-void EmergencyStopOFF(void)
-{
-  //Switch off Stepper
-  digitalWrite(STEP, HIGH);
-  digitalWrite(STEP2, HIGH);
-  EmergencySwitchStatus = false;
-  // Serial.println("Stop OFF");
-}
-
-
-void StartSwitchON(void)
+void StartSwitchISR(void)
 {
   //only if System is not Busy start new iteration of Beer
   digitalWrite(STEP, HIGH);
   digitalWrite(STEP2, HIGH);
   StartSwitchStatus = true;
-  // Serial.println("Start ON");
-}
-
-void StartSwitchOFF(void)
-{
-  //only if System is not Busy start new iteration of Beer
-  digitalWrite(STEP, LOW);
-  digitalWrite(STEP2, LOW);
-  StartSwitchStatus = false;
-  // Serial.println("Start OFF");
+  Serial.println("Start ON");
 }
 
 void BeerPouringRoutine(void)
@@ -180,7 +142,7 @@ void BeerPouringRoutine(void)
 
 void Ranfuehren(void)
 {
-  for(int i = 0; i<STEPS_PER_REV; i++) 
+  for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
   { 
     digitalWrite(STEP, HIGH);
     digitalWrite(STEP2, HIGH);  
@@ -188,13 +150,12 @@ void Ranfuehren(void)
     digitalWrite(STEP, LOW);
     digitalWrite(STEP2, LOW);
     delayMicroseconds(1000);
-
   } 
 }
 
 void Einschenken(void)
 {
-  for(int i = 0; i<STEPS_PER_REV; i++) 
+  for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
   {
     digitalWrite(STEP, HIGH);
     delayMicroseconds(1500);
@@ -209,7 +170,7 @@ void Einschenken(void)
 
 void Hefeextrahieren(void)
 {
-  for(int i = 0; i<STEPS_PER_REV; i++) 
+  for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
   {
     digitalWrite(STEP2, HIGH);
     delayMicroseconds(1000);
@@ -220,7 +181,7 @@ void Hefeextrahieren(void)
 
 void Hefeeinschenken(void)
 {
-  for(int i = 0; i<STEPS_PER_REV; i++) 
+  for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
   {   
     digitalWrite(STEP2, HIGH);
     delayMicroseconds(1000);
@@ -231,7 +192,7 @@ void Hefeeinschenken(void)
 
 void Fertigstellen(void)
 {
-  for(int i = 0; i<STEPS_PER_REV; i++) 
+  for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
   {   
     digitalWrite(STEP, HIGH);
     digitalWrite(STEP2, HIGH);    
