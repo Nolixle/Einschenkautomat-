@@ -18,6 +18,8 @@ void EmergencyStopPressed(void);
 void Ranfuehren(void);  
 void Einschenken(void);
 void Hefeextrahieren(void);
+void Hefeextrahieren2(void);
+void Hefeextrahieren3(void);
 void Hefeeinschenken(void);
 void Fertigstellen(void);
 
@@ -168,6 +170,16 @@ void BeerPouringRoutine(void)
   Hefeextrahieren();
 
   Serial.print("Spinning Clockwise...");
+  digitalWrite(DIR, HIGH);
+  digitalWrite(DIR2, HIGH); 
+  Hefeextrahieren2();
+
+  Serial.print("Spinning Clockwise...");
+  digitalWrite(DIR, LOW);
+  digitalWrite(DIR2, LOW); 
+  Hefeextrahieren3();
+
+  Serial.print("Spinning Clockwise...");
   digitalWrite(DIR, LOW);
   digitalWrite(DIR2, HIGH); 
   Hefeeinschenken();
@@ -215,6 +227,27 @@ void Hefeextrahieren(void)
     delayMicroseconds(1000);
     digitalWrite(STEP2, LOW);   
     delayMicroseconds(1000);
+  }
+}
+void Hefeextrahieren2(void)
+{
+  for(int i = 0; i<STEPS_PER_REV; i++) 
+  {
+  digitalWrite(STEP2, HIGH);
+  delayMicroseconds(1000);
+  digitalWrite(STEP2, LOW);
+  delayMicroseconds(1000);
+  }
+}
+
+void Hefeextrahieren3(void)
+{
+  for(int i = 0; i<STEPS_PER_REV; i++) 
+  {
+  digitalWrite(STEP2, HIGH);
+  delayMicroseconds(1000);
+  digitalWrite(STEP2, LOW);
+  delayMicroseconds(1000);
   }
 }
 
