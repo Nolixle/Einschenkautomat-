@@ -1,10 +1,10 @@
-#define DIR  6
-#define STEP  7
-#define STEPS_PER_REV  2000 
+#define DIR_HEFE  6
+#define STEP_HEFE  7
+#define STEPS_PER_REV_HEFE  2000 
 
-#define DIR2  4    // Stepper 2 
-#define STEP2  5
-#define STEPS_PER_REV2  2000
+#define DIR_GLAS  4    // Stepper 2 
+#define STEP_GLAS  5
+#define STEPS_PER_REV_GLAS  2000
 
 // #define DEBUG
 
@@ -33,10 +33,10 @@ void setup()
   pinMode(EmergencySwitch, LOW);
   pinMode(StartSwitch, INPUT);
   pinMode(StartSwitch, LOW);
-  pinMode(STEP, OUTPUT);
-  pinMode(DIR, OUTPUT);
-  pinMode(STEP2, OUTPUT);   
-  pinMode(DIR2, OUTPUT);
+  pinMode(STEP_GLAS, OUTPUT);
+  pinMode(DIR_GLAS, OUTPUT);
+  pinMode(STEP_HEFE, OUTPUT);   
+  pinMode(DIR_HEFE, OUTPUT);
 
   attachInterrupt(digitalPinToInterrupt(EmergencySwitch), EmergencyStopISR, FALLING);
   attachInterrupt(digitalPinToInterrupt(StartSwitch), StartSwitchISR, RISING);
@@ -97,8 +97,8 @@ void loop()
 void EmergencyStopISR(void)
 {
   //Switch off Stepper
-  digitalWrite(STEP, LOW);
-  digitalWrite(STEP2, LOW);
+  digitalWrite(STEP_GLAS, LOW);
+  digitalWrite(STEP_HEFE, LOW);
   EmergencySwitchStatus = true;
   Serial.println("EMStop ON");
 }
@@ -106,99 +106,171 @@ void EmergencyStopISR(void)
 void StartSwitchISR(void)
 {
   //only if System is not Busy start new iteration of Beer
-  digitalWrite(STEP, HIGH);
-  digitalWrite(STEP2, HIGH);
+  digitalWrite(STEP_HEFE, HIGH);
+  digitalWrite(STEP_GLAS, HIGH);
   StartSwitchStatus = true;
   Serial.println("Start ON");
 }
 
 void BeerPouringRoutine(void)
 {  
-  Serial.println("Spinning Clockwise...");
-  digitalWrite(DIR, HIGH);
-  digitalWrite(DIR2, HIGH);
-  Ranfuehren(); 
+  Serial.println("Ranfuehren\n");
+  // digitalWrite(DIR_HEFE, HIGH);
+  // digitalWrite(DIR_GLAS, HIGH);
+  // Ranfuehren(); 
 
-  Serial.print("Spinning Clockwise...");
-  digitalWrite(DIR, LOW);
-  digitalWrite(DIR2, HIGH); 
-  Einschenken();
+  Serial.println("Einschenken\n");
+  // digitalWrite(DIR_HEFE, LOW);
+  // digitalWrite(DIR_GLAS, HIGH); 
+  // Einschenken();
 
-  Serial.print("Spinning Clockwise...");
-  digitalWrite(DIR, LOW);
-  digitalWrite(DIR2, LOW); 
-  Hefeextrahieren();
+  Serial.println("Hefeextrahieren\n");
+  // digitalWrite(DIR_HEFE, LOW);
+  // digitalWrite(DIR_GLAS, LOW); 
+  // Hefeextrahieren();
 
-  Serial.print("Spinning Clockwise...");
-  digitalWrite(DIR, LOW);
-  digitalWrite(DIR2, HIGH); 
-  Hefeeinschenken();
+  Serial.println("Hefeeinschenken\n");
+  // digitalWrite(DIR_HEFE, LOW);
+  // digitalWrite(DIR_GLAS, HIGH); 
+  // Hefeeinschenken();
 
-  Serial.print("Spinning Clockwise...");
-  digitalWrite(DIR, LOW);
-  digitalWrite(DIR2, LOW); 
-  Fertigstellen();
+  Serial.println("Fertigstellen\n");
+  // digitalWrite(DIR_HEFE, LOW);
+  // digitalWrite(DIR_GLAS, LOW); 
+  // Fertigstellen();
 }
 
-void Ranfuehren(void)
+// void Ranfuehren(void)
+// {
+//   for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
+//   { 
+//     digitalWrite(STEP_HEFE, HIGH);
+//     digitalWrite(STEP_GLAS, HIGH);  
+//     delayMicroseconds(1000);
+//     digitalWrite(STEP_HEFE, LOW);
+//     digitalWrite(STEP_GLAS, LOW);
+//     delayMicroseconds(1000);
+//   } 
+// }
+void turnMotorGlas(bool GlasUp, float RevsGlas)
 {
-  for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
-  { 
-    digitalWrite(STEP, HIGH);
-    digitalWrite(STEP2, HIGH);  
-    delayMicroseconds(1000);
-    digitalWrite(STEP, LOW);
-    digitalWrite(STEP2, LOW);
-    delayMicroseconds(1000);
+  if(GlasUp)
+  {
+    digitalWrite(DIR_GLAS, HIGH);
+  }
+  else
+  {
+    digitalWrite(DIR_GLAS, LOW);
   } 
-}
 
-void Einschenken(void)
-{
-  for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
+  for(int i = 0; i<(STEPS_PER_REV_GLAS * RevsGlas) && !EmergencySwitchStatus; i++) 
   {
-    digitalWrite(STEP, HIGH);
+    digitalWrite(STEP_GLAS, HIGH);
     delayMicroseconds(1500);
-    digitalWrite(STEP, LOW); 
+    digitalWrite(STEP_GLAS, LOW); 
     delayMicroseconds(1500);
-    digitalWrite(STEP2, HIGH);
-    delayMicroseconds(1000);
-    digitalWrite(STEP2, LOW);  
-    delayMicroseconds(1000);
   }
 }
 
-void Hefeextrahieren(void)
+void turnMotorHefe(bool HefeUp, float RrevsHefe)
 {
-  for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
+  if(HefeUp)
   {
-    digitalWrite(STEP2, HIGH);
+    digitalWrite(DIR_HEFE, HIGH);
+  }
+  else
+  {
+    digitalWrite(DIR_HEFE, LOW);
+  } 
+
+  for(int i = 0; i<(STEPS_PER_REV_HEFE * RrevsHefe) && !EmergencySwitchStatus; i++) 
+  {
+    digitalWrite(STEP_HEFE, HIGH);
+    delayMicroseconds(1500);
+    digitalWrite(STEP_HEFE, LOW); 
+    delayMicroseconds(1500);
+  }
+}
+
+void turnMotorHefeGlas(bool HefeUp, bool GlasUp, float Revs)
+{
+  if(HefeUp)
+  {
+    digitalWrite(DIR_HEFE, HIGH);
+  }
+  else
+  {
+    digitalWrite(DIR_HEFE, LOW);
+  } 
+
+  if(GlasUp)
+  {
+    digitalWrite(DIR_GLAS, HIGH);
+  }
+  else
+  {
+    digitalWrite(DIR_GLAS, LOW);
+  }
+
+  for(int i = 0; i<(STEPS_PER_REV_GLAS * Revs) && !EmergencySwitchStatus; i++) 
+  {
+    digitalWrite(STEP_HEFE, HIGH);
+    delayMicroseconds(1500);
+    digitalWrite(STEP_HEFE, LOW); 
+    delayMicroseconds(1500);
+    digitalWrite(STEP_GLAS, HIGH);
     delayMicroseconds(1000);
-    digitalWrite(STEP2, LOW);   
+    digitalWrite(STEP_GLAS, LOW);
     delayMicroseconds(1000);
   }
 }
 
-void Hefeeinschenken(void)
-{
-  for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
-  {   
-    digitalWrite(STEP2, HIGH);
-    delayMicroseconds(1000);
-    digitalWrite(STEP2, LOW);
-    delayMicroseconds(1000);
-  }
-}
+// void Einschenken(void)
+// {
+//   for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
+//   {
+//     digitalWrite(STEP_HEFE, HIGH);
+//     delayMicroseconds(1500);
+//     digitalWrite(STEP_HEFE, LOW); 
+//     delayMicroseconds(1500);
+//     digitalWrite(STEP_GLAS, HIGH);
+//     delayMicroseconds(1000);
+//     digitalWrite(STEP_GLAS, LOW);  
+//     delayMicroseconds(1000);
+//   }
+// }
 
-void Fertigstellen(void)
-{
-  for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
-  {   
-    digitalWrite(STEP, HIGH);
-    digitalWrite(STEP2, HIGH);    
-    delayMicroseconds(1000);
-    digitalWrite(STEP, LOW);
-    digitalWrite(STEP2, LOW);
-    delayMicroseconds(1000);
-  }  
-}
+// void Hefeextrahieren(void)
+// {
+//   for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
+//   {
+//     digitalWrite(STEP_GLAS, HIGH);
+//     delayMicroseconds(1000);
+//     digitalWrite(STEP_GLAS, LOW);   
+//     delayMicroseconds(1000);
+//   }
+// }
+
+// void Hefeeinschenken(void)
+// {
+//   for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
+//   {   
+//     digitalWrite(STEP_GLAS, HIGH);
+//     delayMicroseconds(1000);
+//     digitalWrite(STEP_GLAS, LOW);
+//     delayMicroseconds(1000);
+//   }
+// }
+
+// void Fertigstellen(void)
+// {
+//   for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
+//   {   
+//     digitalWrite(STEP_HEFE, HIGH);
+//     digitalWrite(STEP_GLAS, HIGH);    
+//     delayMicroseconds(1000);
+//     digitalWrite(STEP_HEFE, LOW);
+//     digitalWrite(STEP_GLAS, LOW);
+//     delayMicroseconds(1000);
+//   }  
+// }
