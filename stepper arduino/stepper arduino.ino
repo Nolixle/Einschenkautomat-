@@ -1,10 +1,15 @@
 #define DIR  6
 #define STEP  7
-#define STEPS_PER_REV  2000 
+#define STEPS_PER_REV  2000
+int enPIN = 8;
 
 #define DIR2  4    // Stepper 2 
 #define STEP2  5
-#define STEPS_PER_REV2  2000
+#define STEPS_PER_REV2  5000
+int enPIN2 = 12; 
+
+int stps16=102400;// Steps to move
+int stps5=32000;
 
 // #define DEBUG
 
@@ -39,6 +44,10 @@ void setup()
   pinMode(DIR, OUTPUT);
   pinMode(STEP2, OUTPUT);   
   pinMode(DIR2, OUTPUT);
+  pinMode(enPIN, OUTPUT);
+  pinMode(enPIN2, OUTPUT);
+  digitalWrite(enPIN, LOW);
+  digitalWrite(enPIN2, LOW);
 
   attachInterrupt(digitalPinToInterrupt(EmergencySwitch), EmergencyStopISR, FALLING);
   attachInterrupt(digitalPinToInterrupt(StartSwitch), StartSwitchISR, RISING);
@@ -108,8 +117,8 @@ void EmergencyStopISR(void)
 void StartSwitchISR(void)
 {
   //only if System is not Busy start new iteration of Beer
-  digitalWrite(STEP, HIGH);
-  digitalWrite(STEP2, HIGH);
+  digitalWrite(STEP, LOW);
+  digitalWrite(STEP2, LOW);
   StartSwitchStatus = true;
   Serial.println("Start ON");
 }
@@ -117,8 +126,8 @@ void StartSwitchISR(void)
 void BeerPouringRoutine(void)
 {  
   Serial.println("Spinning Clockwise...");
-  digitalWrite(DIR, HIGH);
-  digitalWrite(DIR2, HIGH);
+  digitalWrite(DIR, LOW);
+  digitalWrite(DIR2, LOW);
   Ranfuehren(); 
 
   Serial.print("Spinning Clockwise...");
@@ -154,84 +163,84 @@ void BeerPouringRoutine(void)
 
 void Ranfuehren(void)
 {
-  for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
+  for(int i = 0; i<STEPS_PER_REV*19 && !EmergencySwitchStatus; i++) 
   { 
     digitalWrite(STEP, HIGH);
     digitalWrite(STEP2, HIGH);  
-    delayMicroseconds(1000);
+    delayMicroseconds(200);
     digitalWrite(STEP, LOW);
     digitalWrite(STEP2, LOW);
-    delayMicroseconds(1000);
+    delayMicroseconds(200);
   } 
 }
 
 void Einschenken(void)
 {
-  for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
+  for(int i = 0; i<STEPS_PER_REV*5 && !EmergencySwitchStatus; i++) 
   {
     digitalWrite(STEP, HIGH);
-    delayMicroseconds(1500);
+    delayMicroseconds(200);
     digitalWrite(STEP, LOW); 
-    delayMicroseconds(1500);
+    delayMicroseconds(200);
     digitalWrite(STEP2, HIGH);
-    delayMicroseconds(1000);
+    delayMicroseconds(200);
     digitalWrite(STEP2, LOW);  
-    delayMicroseconds(1000);
+    delayMicroseconds(200);
   }
 }
 
 void Hefeextrahieren(void)
 {
-  for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
+  for(int i = 0; i<STEPS_PER_REV*5 && !EmergencySwitchStatus; i++) 
   {
     digitalWrite(STEP2, HIGH);
-    delayMicroseconds(1000);
+    delayMicroseconds(200);
     digitalWrite(STEP2, LOW);   
-    delayMicroseconds(1000);
+    delayMicroseconds(200);
   }
 }
 void Hefeextrahieren2(void)
 {
-  for(int i = 0; i<STEPS_PER_REV; i++) 
+  for(int i = 0; i<STEPS_PER_REV*5; i++) 
   {
   digitalWrite(STEP2, HIGH);
-  delayMicroseconds(1000);
+  delayMicroseconds(200);
   digitalWrite(STEP2, LOW);
-  delayMicroseconds(1000);
+  delayMicroseconds(200);
   }
 }
 
 void Hefeextrahieren3(void)
 {
-  for(int i = 0; i<STEPS_PER_REV; i++) 
+  for(int i = 0; i<STEPS_PER_REV*5; i++) 
   {
   digitalWrite(STEP2, HIGH);
-  delayMicroseconds(1000);
+  delayMicroseconds(200);
   digitalWrite(STEP2, LOW);
-  delayMicroseconds(1000);
+  delayMicroseconds(200);
   }
 }
 
 void Hefeeinschenken(void)
 {
-  for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
+  for(int i = 0; i<STEPS_PER_REV*30 && !EmergencySwitchStatus; i++) 
   {   
     digitalWrite(STEP2, HIGH);
-    delayMicroseconds(1000);
+    delayMicroseconds(200);
     digitalWrite(STEP2, LOW);
-    delayMicroseconds(1000);
+    delayMicroseconds(200);
   }
 }
 
 void Fertigstellen(void)
 {
-  for(int i = 0; i<STEPS_PER_REV && !EmergencySwitchStatus; i++) 
+  for(int i = 0; i<STEPS_PER_REV*5 && !EmergencySwitchStatus; i++) 
   {   
     digitalWrite(STEP, HIGH);
     digitalWrite(STEP2, HIGH);    
-    delayMicroseconds(1000);
+    delayMicroseconds(200);
     digitalWrite(STEP, LOW);
     digitalWrite(STEP2, LOW);
-    delayMicroseconds(1000);
+    delayMicroseconds(200);
   }  
 }
